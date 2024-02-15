@@ -3,12 +3,12 @@ version: "3"
 services:
   app:
     container_name: kam
-    image: "ghcr.io/kamailio/kamailio:${KAMA_IMG}"
+    image: "ghcr.io/kamailio/${KAMA_IMG}"
     entrypoint: /etc/kamailio/sh/kam/restart.sh
     depends_on:
       - db
     environment:
-      - KAMA_CONF=${KAMA_CONF}
+      - KAMA_CFG=${KAMA_CFG}
       - KAMA_LISTEN=${KAMA_LISTEN}
     volumes:
       - type: bind

@@ -1,0 +1,11 @@
+# id destination           flags priority attrs
+100  sip:sip.telnyx.com    2     40
+100  sip:sip.telnyx.ca     2     40
+100  sip:sip.telnyx.eu     2     40
+100  sip:sip.telnyx.com.au 2     40
+
+# twilio
+#100 twilio.sip.ashburn.twilio.com 0 0
+#100 twilio.sip.umatilla.twilio.com 0 0
+#100 twilio.sip.frankfurt.twilio.com 0 0
+#100 twilio.sip.sydney.twilio.com 0 0

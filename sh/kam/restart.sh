@@ -1,10 +1,10 @@
 #!/bin/bash
 
-file=${KAMA_CONF:-"kamailio"}
+file=${KAMA_CFG:-"kamailio"}
 
-echo $file
+echo Starting $file
+echo
 # start
-while kamailio -u kamailio -DDE -f /etc/kamailio/${file}.cfg; do
+while kamailio -u kamailio -DDE -f /etc/kamailio/${file}; do
   date; echo "Kamailio exited with $? - restarting $file..." >&2
-  #
 done

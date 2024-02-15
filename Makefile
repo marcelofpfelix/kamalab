@@ -2,8 +2,10 @@
 
 
 
-KAMA_CONF ?= cfg/1-types/1.0.0-stateless
-KAMA_IMG ?= 5.7.2-bookworm
+KAMA_CONF ?= $(find cfg -type f | fzf)
+#cfg/1-types/1.0.0-stateless.cfg
+# https://github.com/kamailio/kamailio-docker/pkgs/container/kamailio/versions?filters%5Bversion_type%5D=tagged
+KAMA_IMG ?= 5.7.4-bookworm
 KAMA_LISTEN ?= 192.0.2.1
 
 EXTRA_ENV := KAMA_CONF=$(KAMA_CONF) KAMA_IMG=$(KAMA_IMG) KAMA_LISTEN=$(KAMA_LISTEN)
@@ -14,13 +16,7 @@ EXTRA_ENV := KAMA_CONF=$(KAMA_CONF) KAMA_IMG=$(KAMA_IMG) KAMA_LISTEN=$(KAMA_LIST
 ################################################################################
 
 run: ## run app
-	$(EXTRA_ENV) docker compose down
-	$(EXTRA_ENV) docker compose -p kam up --force-recreate -V -d app
-
-
-init: ## initialize project
 	bash ./sh/init.sh
-	$(EXTRA_ENV) docker compose pull
 
 
 ################################################################################

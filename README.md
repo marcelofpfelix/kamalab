@@ -12,4 +12,7 @@ cd ~/git/marcelofpfelix/kamalab
 
     ## running
 make
+
+    ## watch for changes and reload
+make watch
 ```

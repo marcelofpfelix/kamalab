@@ -18,6 +18,9 @@ EXTRA_ENV := KAMA_CONF=$(KAMA_CONF) KAMA_IMG=$(KAMA_IMG) KAMA_LISTEN=$(KAMA_LIST
 run: ## run app
 	bash ./sh/init.sh
 
+run2: ## run app2
+	bash ./sh/init2.sh
+
 watch: ## watch for changes and reload
 	bash ./sh/ino.sh . de kam killall kamailio
 

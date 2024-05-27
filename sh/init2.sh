@@ -18,9 +18,9 @@ subnet=127.0.0
     # kamailio-master-devcontainer:latest
   # https://github.com/kamailio/kamailio-docker/pkgs/container/kamailio
     # kamailio:5.7.4-bookworm
-kama_img=kamailio:5.8.1-bookworm
+kama_img=kamailio:5.7.4-bookworm
 # where kamailio will listen
-kama_listen=127.0.0.2
+kama_listen=127.0.0.3
 # local kamailio repo
 kama_repo=~/git/kamailio/kamailio
 
@@ -51,8 +51,8 @@ echo Added ${subnet}.1..${ips} ips to $link
 echo
 
 # update kamailio repo
-git clone --single-branch --depth=1 --branch=master git@github.com:kamailio/kamailio.git $kama_repo 2>/dev/null
 cd $kama_repo
+git clone git@github.com:kamailio/kamailio.git $kama_repo 2>/dev/null
 git pull
 cd ~/git/marcelofpfelix/kamalab/
 
@@ -66,4 +66,4 @@ export KAMA_LISTEN=$kama_listen
 
 docker compose pull
 docker compose down
-docker compose -p kam up --force-recreate -V -d app
+docker compose -p kam2 up --force-recreate -V -d kam2

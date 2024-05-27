@@ -1,0 +1,14 @@
+#!/bin/bash
+
+  # change to local directory
+cd "$(dirname $0)"
+# start kamailio
+./sh/init.sh
+
+# get kamailio logs and restart on change
+cmd="""
+./sh/kamawatch
+./sh/kamalog
+"""
+
+echo "$cmd" | parallel --will-cite --line-buffer

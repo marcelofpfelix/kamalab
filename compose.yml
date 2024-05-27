@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   app:
     container_name: kam
@@ -7,6 +5,21 @@ services:
     entrypoint: /etc/kamailio/sh/kam/restart.sh
     depends_on:
       - db
+    environment:
+      - KAMA_CFG=${KAMA_CFG}
+      - KAMA_LISTEN=${KAMA_LISTEN}
+    volumes:
+      - type: bind
+        source: $PWD
+        target: /etc/kamailio/
+    network_mode: host
+
+  kam2:
+    container_name: kam2
+    image: "ghcr.io/kamailio/${KAMA_IMG}"
+    entrypoint: /etc/kamailio/sh/kam/restart.sh
+#    depends_on:
+#      - db
     environment:
       - KAMA_CFG=${KAMA_CFG}
       - KAMA_LISTEN=${KAMA_LISTEN}

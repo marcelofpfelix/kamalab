@@ -1,7 +1,4 @@
 #!/bin/bash
-
-echo hello
-
   # change to local directory
 cd "$(dirname $0)"
 

@@ -36,7 +36,7 @@ main() {
         date
         echo "reloading..."
         # kill last background process
-        kill $PID 2>/dev/null
+        kill $PID &> /dev/null
     done
 }
 

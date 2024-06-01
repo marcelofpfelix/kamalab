@@ -5,14 +5,16 @@ file=${KAMA_CFG:-"kamailio"}
 # start
 while :; do
   echo
-  echo Starting $file
+  echo "#######################################################################"
+  echo KAMALAB: Using $file
   date
   echo
 
   # check if config is valid
-  kamailio -c -f /etc/kamailio/${file}
+  kamailio -c -f /etc/kamailio/${file} &> /tmp/kamalab
+
   if [ $? -eq 0 ]; then
-    echo "The output was from config validation, stating kamailio now..."
+    echo "KAMALAB: Starting kamailio now..."
     echo
     # start kamailio
     kamailio -u kamailio -DDE -f /etc/kamailio/${file}
@@ -21,10 +23,12 @@ while :; do
       sleep 5
     fi
     # kamailio got killed
-    echo "Kamailio exited with $exit - restarting $file..." >&2
+    echo "KAMALAB: Kamailio exited with $exit - restarting $file..."
     # if exited with error
   # invalid config
   else
+    echo "KAMALAB: Invalid config"
+    echo $(cat /tmp/kamalab)
     sleep 5
   fi
 done

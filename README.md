@@ -17,8 +17,8 @@ cd ~/git/marcelofpfelix/kamalab
 
 ```yml
 - docker
-- fzf
-- parallel
+- junegunn/fzf
+- gnu parallel
 ```
 
 ### How it works

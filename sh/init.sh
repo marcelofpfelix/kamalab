@@ -18,7 +18,7 @@ subnet=127.0.0
     # kamailio-master-devcontainer:latest
   # https://github.com/kamailio/kamailio-docker/pkgs/container/kamailio
     # kamailio:5.7.4-bookworm
-kama_img=kamailio:5.8.1-bookworm
+kama_img=kamailio:5.7.2-bookworm
 # where kamailio will listen
 kama_listen=127.0.0.2
 # local kamailio repo
@@ -27,7 +27,7 @@ kama_repo=~/git/kamailio/kamailio
 # if no argument is passed, use the default
 if [[ -z $1 ]]; then
   cd ~/git/marcelofpfelix/kamalab/
-  kama_cfg=$(find cfg -type f -exec ls -1t "{}" + | fzf)
+  kama_cfg=$(find cfg -type f -name "*.cfg" -exec ls -1t "{}" + | fzf)
 else
   kama_cfg=$1
 fi

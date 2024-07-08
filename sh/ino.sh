@@ -5,7 +5,6 @@
 # reload in case of file changes, using node notify inotifywait
 ################################################################################
 
-
 # if the script is interrupted, the run process should be killed
 sigint_handler(){
     kill $PID 2>/dev/null
@@ -34,7 +33,7 @@ main() {
         # -r: recursive
         # -q: quiet nothing
         date
-        echo "reloading..."
+        echo "reloading...$PWD"
         # kill last background process
         kill $PID &> /dev/null
     done

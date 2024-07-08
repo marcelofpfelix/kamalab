@@ -1,6 +1,6 @@
 #!/bin/bash
 
-file=${KAMA_CFG:-"kamailio"}
+file=tmp/kamailio.cfg
 
 # start
 while :; do

@@ -8,6 +8,9 @@ services:
     environment:
       - KAMA_CFG=${KAMA_CFG}
       - KAMA_LISTEN=${KAMA_LISTEN}
+      - KEMI=${KEMI}
+      - KEMI_ENG=${KEMI_ENG}
+      - KAMA_INC=${KAMA_INC}
     volumes:
       - type: bind
         source: $PWD

@@ -1,14 +1,154 @@
 #!/bin/bash
 
-  # change to local directory
-cd "$(dirname $0)"
-# start kamailio
-./sh/init.sh
-
-# get kamailio logs and restart on change
-cmd="""
-./sh/kamawatch
-./sh/kamalog
+# cli with boa
+CLI="""
+use: kamalab
+short: kamailio lab
+long: |
+  kamailio by example lab 
+  used in bandonga.com/kamailio
+flags:
+  - use: kemi
+    short: kemi language [lua, py]
+    alias: k
+    type: string
+  - use: tag
+    short: tag version
+    alias: t
+    type: string
+  - use: update
+    short: pull repos and docker images
+    alias: u
+    type: bool
+  - use: source
+    short: clone kamailio source
+    alias: s
+    type: bool
+  - use: restart kam
+    short: restart docker container
+    alias: r
+    type: bool
 """
 
-echo "$cmd" | parallel --will-cite --line-buffer
+  # change to local directory
+cd "$(dirname $0)"
+
+DEPENDENCIES="docker fzf parallel envtpl boa"
+
+. ./sh/lib_utils.sh
+
+init_docker() {
+  kemi="${ARGS[1]:-inc.cfg}"
+  tag="${ARGS[2]:-5.8.1-bookworm}"
+  update="${ARGS[3]}"
+  source="${ARGS[4]}"
+  restart="${ARGS[5]}"
+
+
+  # subnet for docs
+  # 192.0.2
+  # local subnet
+  subnet=127.0.0
+  # Check latest kamailio versions:
+    # https://github.com/kamailio/kamailio/pkgs/container/kamailio-master-devcontainer
+      # kamailio-master-devcontainer:latest
+    # https://github.com/kamailio/kamailio-docker/pkgs/container/kamailio
+      # kamailio:5.7.4-bookworm
+  kama_img=kamailio:$tag
+  # where kamailio will listen
+  kama_listen=127.0.0.2
+  # local kamailio repo
+  kama_repo=~/git/kamailio/kamailio
+  local_repo="$PWD"
+
+  kama_cfg=$(find cfg -type f -name "*.cfg" ! -name "*.inc.cfg" -exec ls -1t "{}" + | fzf)
+
+  kama_inc="/etc/kamailio/${kama_cfg/.cfg/".$kemi"}"
+  kemi_eng=$kemi
+
+  if [[ "$kemi" == "py" ]]; then
+    kemi_eng=python
+    kemi=python3s
+  fi
+  kemi_mod="app_${kemi}"
+
+  # if no argument is passed, use the default
+  route=${1:-kss-us}
+  # number of ips
+  ips=${2:-10} # default is 10
+  # default interface
+  link=lo # $(ip r | grep '^default' | grep -oP '(?<=dev\s)\w+' | head -n 1)
+
+
+  # ##############################################################################
+  # init
+  # ##############################################################################
+
+  for ((i=1;i<=ips;i++)); do
+    sudo ip addr add $subnet.$i dev $link 2>/dev/null
+  done
+
+  echo Added ${subnet}.1..${ips} ips to $link
+  echo
+
+  if [[ "$update" == "true" ]]; then
+    # update kamailio repo
+    cd $kama_repo
+    git clone --single-branch --depth=1 --branch=master git@github.com:kamailio/kamailio.git $kama_repo 2>/dev/null
+  fi
+
+  cd $local_repo
+
+  echo
+  echo Starting  $kama_cfg
+  echo with      $kama_img
+  echo listening $kama_listen
+  echo kemi      $kemi
+  echo
+
+  export KAMA_IMG=$kama_img
+  export KAMA_CFG=$kama_cfg
+  export KAMA_LISTEN=$kama_listen
+  export KAMA_INC=$kama_inc
+  export KEMI=$kemi
+  export KEMI_ENG=$kemi_eng
+  export KEMI_MOD=$kemi_mod
+
+
+  envtpl cfg/z-shared/route.inc.cfg.tpl -o tmp/route.inc.cfg
+  cp $kama_cfg tmp/kamailio.cfg
+  echo $kama_cfg tmp/kamailio.cfg
+
+  # check if it's already running
+  # docker_status=$(docker container inspect -f '{{.State.Running}}' kam)
+  # if [[ "$docker_status" != "true" || "$restart" == "true" ]]; then
+  echo restarting kam
+  git pull origin main
+  docker compose pull
+  docker compose down
+  docker compose -p kam up --force-recreate -d -V app
+  # fi
+
+}
+
+
+kamalab() {
+  # check dependencies
+  if ! check_deps; then
+      exit 1
+  fi
+
+  # start kamailio
+  init_docker
+
+  # get kamailio logs and restart on change
+  cmd="""
+  ./sh/kamawatch
+  ./sh/kamalog
+  """
+  echo "$cmd" | parallel --will-cite --line-buffer
+}
+
+# run the command selected
+[[ -n "$CMD" ]] && "$CMD"
+

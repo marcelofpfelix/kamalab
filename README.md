@@ -19,11 +19,17 @@ cd ~/git/marcelofpfelix/kamalab
 - docker
 - junegunn/fzf
 - gnu parallel
+- envtpl/envtpl
+- marcelofpfelix/boa
+- inotifywait from inotify-tools
 ```
 
 ### How it works
+
+The cli is done with [boa](https://github.com/marcelofpfelix/boa) and jinja2 templates with `envtpl`.
+
 A Docker container starts with a ghcr.io/kamailio image.
-This container shares a volume in `/etc/kamailio` and uses the entrypoint to start the `fzf` selected config file: `kamailio -u kamailio -DDE -f /etc/kamailio/${file}`
+This container shares a volume in `/etc/kamailio` and uses a custom entrypoint to start the `fzf` selected config file.
 
 After that, `parallel` runs 2 tasks:
 - tail of docker logs and

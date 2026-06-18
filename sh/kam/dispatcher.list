@@ -1,11 +1,11 @@
 # id destination           flags priority attrs
-100  sip:sip.telnyx.com    2     40
-100  sip:sip.telnyx.ca     2     40
-100  sip:sip.telnyx.eu     2     40
-100  sip:sip.telnyx.com.au 2     40
+100  sip:sip1.example.net  2     20
+100  sip:sip2.example.net  2     40
+#100 sip:sip3.example.net  2     40
+#100 sip:sip4.example.net  2     40
 
-# twilio
-#100 twilio.sip.ashburn.twilio.com 0 0
-#100 twilio.sip.umatilla.twilio.com 0 0
-#100 twilio.sip.frankfurt.twilio.com 0 0
-#100 twilio.sip.sydney.twilio.com 0 0
+# additional upstream gateways can be added with the same set id
+#100 sip:backup1.example.net 0 0
+#100 sip:backup2.example.net 0 0
+#100 sip:backup3.example.net 0 0
+#100 sip:backup4.example.net 0 0
